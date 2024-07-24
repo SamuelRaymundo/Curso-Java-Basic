@@ -6,7 +6,6 @@ import model.services.ContractService;
 import model.services.PayPalService;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -36,9 +35,5 @@ public class Program {
         for (Installment installment : contract.getInstallmentList()) {
             System.out.println(installment);
         }
-
-
-
-
     }
 }
