@@ -13,12 +13,8 @@ public class Program {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Connection conn = null;
         PreparedStatement st = null;
-        ResultSet rs = null;
 
         try {
-
-            System.out.print("How many sellers do you want to add: ");
-            int sellersQuantity = sc.nextInt();
 
             conn = DB.getConnection();
 
@@ -30,50 +26,24 @@ public class Program {
                     Statement.RETURN_GENERATED_KEYS);
 
 
-            for (int i = 0; i < sellersQuantity; i++) {
-                System.out.print("Name: ");
-                String name = sc.next();
-                System.out.print("Email: ");
-                String email = sc.next();
-                System.out.print("Birth Date (dd/MM/yyyy):  ");
-                java.sql.Date date = new java.sql.Date(sdf.parse(sc.next()).getTime());
-                System.out.print("Base Salary: ");
-                double baseSalary = sc.nextDouble();
+            st.setString(1,"Carl Purple");
+            st.setString(2,"carl@gmail.com");
+            st.setDate(3,new java.sql.Date(sdf.parse("07/02/2005").getTime()));
+            st.setDouble(4,3020.0);
+            st.setInt(5,4);
 
+            int rowsAffected = st.executeUpdate();
 
-                Statement pr = conn.createStatement();
-                rs = pr.executeQuery("select * from department");
-
-                System.out.println("Departments names: ");
-
+            if (rowsAffected > 0) {
+                ResultSet rs = st.getGeneratedKeys();
                 while (rs.next()) {
-                    System.out.println(rs.getInt("Id") + ": " + rs.getString("Name"));
+                    int id = rs.getInt(1);
+                    System.out.println("Done! id " + id);
                 }
-
-                System.out.print("Departament: ");
-                int departament = sc.nextInt();
-
-
-                st.setString(1,name);
-                st.setString(2,email);
-                st.setDate(3,date);
-                st.setDouble(4,baseSalary);
-                st.setInt(5,departament);
-                int rowsAffected = st.executeUpdate();
-
-                if (rowsAffected > 0) {
-                    rs = st.getGeneratedKeys();
-                    while (rs.next()) {
-                        int id = rs.getInt(1);
-                        System.out.println("Done! id " + id);
-                    }
-                }
-                else {
-                    System.out.println("No rows affecteds!");
-                }
-
             }
-
+            else {
+                System.out.println("No rows affecteds!");
+            }
         }
         catch (SQLException e) {
             e.printStackTrace();
