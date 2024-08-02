@@ -17,37 +17,38 @@ public class Program {
 
         Scanner sc = new Scanner(System.in);
 
-        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-            List<Employee> employeeList = new ArrayList<>();
+        try(BufferedReader br = new BufferedReader(new FileReader(path))) {
+            List<Employee> list = new ArrayList<>();
             String line = br.readLine();
+
             while (line != null) {
                 String[] fields = line.split(",");
-                employeeList.add(new Employee(fields[0], fields[1], Double.parseDouble(fields[2])));
+                list.add(new Employee(fields[0],fields[1],Double.parseDouble(fields[2])));
                 line = br.readLine();
             }
-            System.out.print("Enter salary: ");
-            double salary = sc.nextDouble();
 
-            System.out.println("Email of people whose salary is more than " + salary);
+            System.out.print("Enter the salary: ");
+            double salary = sc.nextDouble();
 
             Comparator<String> stringComparator = (s1,s2) -> s1.toUpperCase().compareTo(s2.toUpperCase());
 
-            List<String> email = employeeList.stream()
-                    .filter(p -> p.getSalary() >= salary)
+            List<String> email = list.stream()
+                    .filter(employee -> employee.getSalary() >= salary)
                     .map(employee -> employee.getEmail())
                     .sorted(stringComparator)
                     .collect(Collectors.toList());
 
+            System.out.println("Email of people whose salary is more than " + salary);
+
             email.forEach(System.out::println);
 
-            char intialOfName = 'M';
-
-            double sum = employeeList.stream()
-                    .filter(employee -> employee.getName().charAt(0) == intialOfName)
+            char intialLetter = 'M';
+            double sum = list.stream()
+                    .filter(employee -> employee.getName().charAt(0) == intialLetter)
                     .map(employee -> employee.getSalary())
                     .reduce(0.0,(x,y) -> x + y);
 
-            System.out.println("Sum of salary of people whose name starts with 'M': "+ sum);
+            System.out.println("Sum of salary of people whose name starts with 'M': " + sum );
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
